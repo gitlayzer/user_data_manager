@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑用户</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<h1>编辑用户</h1>
+<form action="#">
+    <input type="text" name="id" value="{{ user_obj.id }}" style="display: none">
+    姓名：<input type="text" name="name" value="{{ user_obj.name }}"><br>
+    城市：<input type="text" name="city" value="{{ user_obj.city }}"><br>
+    性别：<input type="text" name="sex" value="{{ user_obj.sex }}"><br>
+    年龄：<input type="text" name="age" value="{{ user_obj.age }}"><br>
+    <input type="button" id="btn" value="提交">
+</form>
+<script>
+    // 点击提交获取输入框的值通过PUT请求发送给服务器
+    $('#btn').click(function (){
+        // 获取输入的值
+        var id = $('input[name="id"]').val();
+        var name = $('input[name="name"]').val();
+        var city = $('input[name="city"]').val();
+        var sex = $('input[name="sex"]').val();
+        var age = $('input[name="age"]').val();
+        // 组合数据成为一个字典
+        data = {'id': id, 'name': name, 'city': city, 'sex': sex, 'age': age}
+        $.ajax({
+            type: 'PUT',
+            url: '/app/user/',
+            data: data,
+            success: function (data) {
+                if (data.code === 200) {
+                    alert("更新成功");
+                    window.location.reload();
+                } else {
+                    alert("更新失败");
+                }
+            },
+            error: function () {
+                alert("更新失败");
+            }
+        })
+    })
+</script>
+</body>
+</html>

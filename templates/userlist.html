@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理系统</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+<h1>用户信息管理</h1>
+<button><a href="/app/useradd/" target="_blank">创建用户</a></button>
+<table border="2">
+    <thead>
+         <tr>
+             <th>ID</th>
+             <th>姓名</th>
+             <th>城市</th>
+             <th>性别</th>
+             <th>年龄</th>
+             <th>操作</th>
+         </tr>
+    </thead>
+    <tbody>
+    {% for i in userlist %}
+         <tr>
+             <td>{{ i.id }}</td>
+             <td>{{ i.name }}</td>
+             <td>{{ i.city }}</td>
+             <td>{{ i.sex }}</td>
+             <td>{{ i.age }}</td>
+             <td>
+                 <button><a href="/app/useredit?id={{ i.id }}" target="_blank">编辑</a></button>
+                 <button onclick="delUser(this)">删除</button>
+             </td>
+         </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script>
+    function delUser(obj) {
+        confirm = confirm('确定删除吗？');
+        if (confirm) {
+            id = $(obj).parent().parent().find("td:eq(0)").text();
+            data = {'id': id};
+            $.ajax({
+                type: 'DELETE',
+                url: '/app/user',
+                data: data,
+                success: function (result) {
+                    if (result.code === 200) {
+                        alert("删除成功");
+                        window.location.reload();
+                    } else {
+                        alert("删除失败");
+                    }
+                },
+                error: function () {
+                    alert("删除失败");
+                }
+            })
+        }
+    }
+</script>
+</body>
+</html>
